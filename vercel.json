@@ -7,7 +7,7 @@
       "framework": "vite"
     },
     "backend": {
-      "entrypoint": "backend/src/server.js",
+      "entrypoint": "backend/src",
       "routePrefix": "/api"
     }
   }
