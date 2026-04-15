@@ -1,15 +1,29 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "experimentalServices": {
-    "frontend": {
-      "entrypoint": "frontend",
-      "routePrefix": "/",
-      "framework": "vite"
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/[...all].js",
+      "use": "@vercel/node"
     },
-    "backend": {
-      "entrypoint": "backend/src/server.js",
-      "routePrefix": "/api",
-      "framework": "express"
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
     }
-  }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/[...all].js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
