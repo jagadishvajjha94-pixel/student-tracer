@@ -126,3 +126,44 @@ frontend/src/
 - Restrict CORS via `CLIENT_ORIGIN`.  
 - Run `npm run build` in `frontend` and serve `frontend/dist` behind nginx or similar.  
 - Use a managed MongoDB cluster for production data.
+
+## Deploy on Vercel (from GitHub)
+
+Deploy as **2 Vercel projects** from the same repository:
+
+### 1) Backend API project
+
+- Import repo in Vercel.
+- **Root Directory:** `backend`
+- Framework preset: **Other**
+- This repo includes `backend/api/[...all].js` for Vercel serverless routing.
+
+Set backend environment variables in Vercel:
+
+- `MONGODB_URI` = your Atlas/managed Mongo connection string
+- `JWT_SECRET` = long random secret
+- `JWT_EXPIRES_IN` = `7d` (or your value)
+- `NODE_ENV` = `production`
+- `USE_MEMORY_DB` = `false`
+- `CLIENT_ORIGIN` = your frontend Vercel URL (for CORS)
+
+After deploy, confirm:
+
+- `https://<backend-domain>/api/health`
+
+### 2) Frontend project
+
+- Import same repo in Vercel again.
+- **Root Directory:** `frontend`
+- Framework preset: **Vite**
+
+Set frontend environment variable:
+
+- `VITE_API_BASE_URL` = `https://<backend-domain>`
+
+Then redeploy frontend and open the app URL.
+
+### Notes
+
+- Frontend calls API as `${VITE_API_BASE_URL}/api/...`.
+- Do not use embedded MongoDB (`USE_MEMORY_DB=true`) on Vercel production.

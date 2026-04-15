@@ -1,64 +1,11 @@
 require('./loadEnv');
 const mongoose = require('mongoose');
-const express = require('express');
-const cors = require('cors');
-const { connectWithRetry, getDbStatus, startReconnectLoop } = require('./config/db');
+const { connectWithRetry, startReconnectLoop } = require('./config/db');
 const { maybeStartMemoryServer, stopMemoryServer } = require('./config/memoryMongo');
-const { requireDb } = require('./middleware/requireDb');
+const { createApp } = require('./createApp');
 
-const authRoutes = require('./routes/authRoutes');
-const interviewRoutes = require('./routes/interviewRoutes');
-const analyticsRoutes = require('./routes/analyticsRoutes');
-const exportRoutes = require('./routes/exportRoutes');
-const studentRoutes = require('./routes/studentRoutes');
-
-const app = express();
+const app = createApp();
 const PORT = Number(process.env.PORT) || 5000;
-
-const allowedOrigins = new Set([
-  'http://localhost:5173',
-  'http://127.0.0.1:5173',
-]);
-if (process.env.CLIENT_ORIGIN) {
-  allowedOrigins.add(process.env.CLIENT_ORIGIN);
-}
-
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.has(origin)) {
-        return callback(null, true);
-      }
-      if (process.env.NODE_ENV !== 'production') {
-        return callback(null, true);
-      }
-      return callback(new Error('Not allowed by CORS'));
-    },
-    credentials: true,
-  })
-);
-app.use(express.json({ limit: '1mb' }));
-
-app.get('/api/health', (req, res) => {
-  res.json({
-    ok: true,
-    service: 'student-interview-tracker-api',
-    database: getDbStatus(),
-  });
-});
-
-app.use('/api', requireDb);
-
-app.use('/api/auth', authRoutes);
-app.use('/api/interviews', interviewRoutes);
-app.use('/api/analytics', analyticsRoutes);
-app.use('/api/export', exportRoutes);
-app.use('/api/students', studentRoutes);
-
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ message: 'Internal server error' });
-});
 
 async function shutdown(signal) {
   console.log(`\n${signal} — shutting down…`);

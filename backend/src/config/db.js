@@ -12,6 +12,9 @@ function getDbStatus() {
  * Retries so MongoDB can start (e.g. Docker) after the API process.
  */
 async function connectWithRetry(options = {}) {
+  if (mongoose.connection.readyState === 1 || mongoose.connection.readyState === 2) {
+    return;
+  }
   const uri = process.env.MONGODB_URI;
   if (!uri) {
     throw new Error('MONGODB_URI is not defined');
