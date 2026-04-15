@@ -1,0 +1,12 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: sit-mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - sit_mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  sit_mongo_data:

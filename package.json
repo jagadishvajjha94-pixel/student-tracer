@@ -1,0 +1,11 @@
+{
+  "name": "student-interview-tracker",
+  "private": true,
+  "scripts": {
+    "mongo": "docker compose up -d",
+    "mongo:down": "docker compose down",
+    "dev": "node scripts/dev.cjs",
+    "doctor": "node scripts/doctor.cjs",
+    "install:all": "npm install --prefix backend && npm install --prefix frontend"
+  }
+}
