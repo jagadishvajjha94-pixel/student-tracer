@@ -17,16 +17,11 @@ function buildQuery(params) {
   const q = new URLSearchParams();
   if (params.q) q.set('q', params.q);
   if (params.batch) q.set('batch', params.batch);
-  if (params.group) q.set('group', params.group);
   if (params.status) q.set('status', params.status);
   if (params.placementStatus) q.set('placementStatus', params.placementStatus);
   if (params.technicalSkill) q.set('technicalSkill', params.technicalSkill);
   if (params.interviewType) q.set('interviewType', params.interviewType);
   if (params.interviewerId) q.set('interviewerId', params.interviewerId);
-  if (params.minScore !== '') q.set('minScore', String(params.minScore));
-  if (params.maxScore !== '') q.set('maxScore', String(params.maxScore));
-  if (params.minTechnicalScore !== '') q.set('minTechnicalScore', String(params.minTechnicalScore));
-  if (params.maxTechnicalScore !== '') q.set('maxTechnicalScore', String(params.maxTechnicalScore));
   q.set('page', String(params.page || 1));
   q.set('limit', String(params.limit || 20));
   return q.toString();
@@ -47,16 +42,11 @@ export default function AdminDashboard() {
   const [filters, setFilters] = useState({
     q: '',
     batch: '',
-    group: '',
     status: '',
     placementStatus: '',
     technicalSkill: '',
     interviewType: '',
     interviewerId: '',
-    minScore: '',
-    maxScore: '',
-    minTechnicalScore: '',
-    maxTechnicalScore: '',
     page: 1,
     limit: 20,
   });
@@ -244,15 +234,6 @@ export default function AdminDashboard() {
             />
           </div>
           <div>
-            <label className="label">Group</label>
-            <input
-              className="input"
-              value={filters.group}
-              onChange={(e) => setFilters((f) => ({ ...f, group: e.target.value, page: 1 }))}
-              placeholder="e.g. A"
-            />
-          </div>
-          <div>
             <label className="label">Placement status</label>
             <select
               className="input"
@@ -306,60 +287,12 @@ export default function AdminDashboard() {
             </select>
           </div>
           <div>
-            <label className="label">Min overall score (0–10)</label>
-            <input
-              className="input"
-              type="number"
-              min={0}
-              max={10}
-              step={0.1}
-              value={filters.minScore}
-              onChange={(e) => setFilters((f) => ({ ...f, minScore: e.target.value, page: 1 }))}
-            />
-          </div>
-          <div>
-            <label className="label">Max overall score (0–10)</label>
-            <input
-              className="input"
-              type="number"
-              min={0}
-              max={10}
-              step={0.1}
-              value={filters.maxScore}
-              onChange={(e) => setFilters((f) => ({ ...f, maxScore: e.target.value, page: 1 }))}
-            />
-          </div>
-          <div>
             <label className="label">Technical skill filter</label>
             <input
               className="input"
               value={filters.technicalSkill}
               onChange={(e) => setFilters((f) => ({ ...f, technicalSkill: e.target.value, page: 1 }))}
               placeholder="e.g. React"
-            />
-          </div>
-          <div>
-            <label className="label">Min technical score</label>
-            <input
-              className="input"
-              type="number"
-              min={0}
-              max={10}
-              step={0.1}
-              value={filters.minTechnicalScore}
-              onChange={(e) => setFilters((f) => ({ ...f, minTechnicalScore: e.target.value, page: 1 }))}
-            />
-          </div>
-          <div>
-            <label className="label">Max technical score</label>
-            <input
-              className="input"
-              type="number"
-              min={0}
-              max={10}
-              step={0.1}
-              value={filters.maxTechnicalScore}
-              onChange={(e) => setFilters((f) => ({ ...f, maxTechnicalScore: e.target.value, page: 1 }))}
             />
           </div>
         </div>
